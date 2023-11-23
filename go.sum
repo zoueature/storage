@@ -32,6 +32,8 @@ github.com/jiebutech/config v0.0.0-20231123072524-4a9e703b6578 h1:n1nTuefuOkQQps
 github.com/jiebutech/config v0.0.0-20231123072524-4a9e703b6578/go.mod h1:2YSLpRpmn0vKBWKzTM/RyK6IjXlZmXwTbA0ABbEah7o=
 github.com/jiebutech/config v0.0.0-20231123074632-69eb56a25058 h1:HYtUScDHq7PJxC0eif8s0b8AIAwQ1INl1cWBUdh98yo=
 github.com/jiebutech/config v0.0.0-20231123074632-69eb56a25058/go.mod h1:2YSLpRpmn0vKBWKzTM/RyK6IjXlZmXwTbA0ABbEah7o=
+github.com/jiebutech/config v0.0.1 h1:0gQc9arkYuQZAmbO5DPWqlRFH9O6N2wmeH57NNO/9nE=
+github.com/jiebutech/config v0.0.1/go.mod h1:2YSLpRpmn0vKBWKzTM/RyK6IjXlZmXwTbA0ABbEah7o=
 github.com/kr/pretty v0.3.1 h1:flRD4NNwYAUpkphVc1HcthR4KEIFJ65n8Mw5qdRn3LE=
 github.com/kr/pretty v0.3.1/go.mod h1:hoEshYVHaxMs3cyo3Yncou5ZscifuDolrwPKZanG3xk=
 github.com/kr/text v0.2.0 h1:5Nx0Ya0ZqY2ygV366QzturHI13Jq95ApcVaJBhpS+AY=
