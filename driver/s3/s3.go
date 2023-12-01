@@ -6,8 +6,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/jiebutech/config"
-	"github.com/jiebutech/storage"
+	"gitlab.jiebu.com/base/config"
+	"gitlab.jiebu.com/pkg/storage"
 	"io"
 )
 
