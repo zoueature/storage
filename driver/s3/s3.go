@@ -46,7 +46,9 @@ func (c *client) Type() string {
 	return "S3"
 }
 
-func (c *client) Upload(ctx context.Context, reader io.Reader, key ...string) (string, error) {
+type keyOption func(string2 *string)
+
+func (c *client) Upload(ctx context.Context, reader io.Reader, keyOps ...storage.KeyOperate) (string, error) {
 	content, err := io.ReadAll(reader)
 	if err != nil {
 		return "", err
@@ -55,8 +57,8 @@ func (c *client) Upload(ctx context.Context, reader io.Reader, key ...string) (s
 	h.Write(content)
 	hashBytes := h.Sum(nil)
 	objectName := hex.EncodeToString(hashBytes)
-	if len(key) > 0 {
-		objectName = key[0]
+	for _, opKey := range keyOps {
+		opKey(&objectName)
 	}
 	mimeType := http.DetectContentType(content)
 	_, err = c.cli.PutObject(ctx, &s3.PutObjectInput{
