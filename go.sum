@@ -38,6 +38,8 @@ github.com/zoueature/config v0.0.5 h1:ffA/24ARKePrBDmhcN9i3NWF6YxnBaeTbPleRFDRsL
 github.com/zoueature/config v0.0.5/go.mod h1:wQhSuwmi+pzUNjtiyDG5x9ZBMUaX5DmsOn8veoLFQIw=
 github.com/zoueature/config v0.0.6 h1:uh0+0uTihHUpfAP/sK1aMx7V3wW5kx0j5bIAe6Ur+r0=
 github.com/zoueature/config v0.0.6/go.mod h1:wQhSuwmi+pzUNjtiyDG5x9ZBMUaX5DmsOn8veoLFQIw=
+github.com/zoueature/config v0.0.7 h1:JwEzp3LwHK0pj+mJxcoYC/appOXthEtcLq0xAuLUZIo=
+github.com/zoueature/config v0.0.7/go.mod h1:wQhSuwmi+pzUNjtiyDG5x9ZBMUaX5DmsOn8veoLFQIw=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
