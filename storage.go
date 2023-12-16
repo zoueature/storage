@@ -4,7 +4,7 @@ import (
 	"errors"
 )
 
-import "gitlab.jiebu.com/base/config"
+import "github.com/zoueature/config"
 
 type storageDriver func(cfg config.StorageConfig) Storage
 
