@@ -7,5 +7,6 @@ import (
 
 type Storage interface {
 	Type() string
-	Upload(ctx context.Context, key string, reader io.Reader, bucket ...string) (string, error)
+	Upload(ctx context.Context, reader io.Reader, key ...string) (string, error)
+	SignAccessURL(ctx context.Context, objectKey string, ttl ...int) (string, error)
 }
