@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go-v2/service/s3/types"
 	"github.com/zoueature/config"
 	"github.com/zoueature/storage"
 	"io"
@@ -46,26 +47,47 @@ func (c *client) Type() string {
 	return "S3"
 }
 
-type keyOption func(string2 *string)
-
 func (c *client) Upload(ctx context.Context, reader io.Reader, keyOps ...storage.KeyOperate) (string, error) {
-	content, err := io.ReadAll(reader)
+	content, name, err := objectName(reader, keyOps...)
+	mimeType := http.DetectContentType(content)
+	_, err = c.cli.PutObject(ctx, &s3.PutObjectInput{
+		Key:         aws.String(name),
+		Bucket:      aws.String(c.bucket),
+		Body:        bytes.NewReader(content),
+		ContentType: aws.String(mimeType),
+		ACL:         types.ObjectCannedACLPublicRead,
+	})
 	if err != nil {
 		return "", err
+	}
+	return fmt.Sprintf("%s/%s", c.domain, objectName), nil
+}
+
+func objectName(reader io.Reader, keyOps ...storage.KeyOperate) ([]byte, string, error) {
+	content, err := io.ReadAll(reader)
+	if err != nil {
+		return nil, "", err
 	}
 	h := md5.New()
 	h.Write(content)
 	hashBytes := h.Sum(nil)
-	objectName := hex.EncodeToString(hashBytes)
+	name := hex.EncodeToString(hashBytes)
 	for _, opKey := range keyOps {
-		opKey(&objectName)
+		opKey(&name)
 	}
+	return content, name, nil
+}
+
+func (c *client) UploadToPublic(ctx context.Context, reader io.Reader, keyOps ...storage.KeyOperate) (string, error) {
+	content, name, err := objectName(reader, keyOps...)
+
 	mimeType := http.DetectContentType(content)
 	_, err = c.cli.PutObject(ctx, &s3.PutObjectInput{
-		Key:         aws.String(objectName),
+		Key:         aws.String(name),
 		Bucket:      aws.String(c.bucket),
 		Body:        bytes.NewReader(content),
 		ContentType: aws.String(mimeType),
+		ACL:         types.ObjectCannedACLPublicRead,
 	})
 	if err != nil {
 		return "", err
