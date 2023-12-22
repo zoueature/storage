@@ -49,18 +49,33 @@ func (c *client) Type() string {
 
 func (c *client) Upload(ctx context.Context, reader io.Reader, keyOps ...storage.KeyOperate) (string, error) {
 	content, name, err := objectName(reader, keyOps...)
+	if err != nil {
+		return "", err
+	}
 	mimeType := http.DetectContentType(content)
 	_, err = c.cli.PutObject(ctx, &s3.PutObjectInput{
 		Key:         aws.String(name),
 		Bucket:      aws.String(c.bucket),
 		Body:        bytes.NewReader(content),
 		ContentType: aws.String(mimeType),
-		ACL:         types.ObjectCannedACLPublicRead,
 	})
 	if err != nil {
 		return "", err
 	}
 	return fmt.Sprintf("%s/%s", c.domain, objectName), nil
+}
+
+// UploadByCustomKey 自定义key上传
+func (c *client) UploadByCustomKey(ctx context.Context, reader io.Reader, objectKey string) (string, error) {
+	_, err := c.cli.PutObject(ctx, &s3.PutObjectInput{
+		Key:    aws.String(objectKey),
+		Bucket: aws.String(c.bucket),
+		Body:   reader,
+	})
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("%s/%s", c.domain, objectKey), nil
 }
 
 func objectName(reader io.Reader, keyOps ...storage.KeyOperate) ([]byte, string, error) {
