@@ -62,7 +62,7 @@ func (c *client) Upload(ctx context.Context, reader io.Reader, keyOps ...storage
 	if err != nil {
 		return "", err
 	}
-	return fmt.Sprintf("%s/%s", c.domain, objectName), nil
+	return fmt.Sprintf("%s/%s", c.domain, name), nil
 }
 
 // UploadByCustomKey 自定义key上传
