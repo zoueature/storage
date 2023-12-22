@@ -12,4 +12,5 @@ type Storage interface {
 	Upload(ctx context.Context, reader io.Reader, key ...KeyOperate) (string, error)
 	SignAccessURL(ctx context.Context, objectKey string, ttl ...int) (string, error)
 	UploadToPublic(ctx context.Context, reader io.Reader, keyOps ...KeyOperate) (string, error)
+	GetContent(ctx context.Context, objectKey string) ([]byte, error)
 }

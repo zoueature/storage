@@ -111,3 +111,19 @@ func (c *client) SignAccessURL(ctx context.Context, objectKey string, ttl ...int
 	}
 	return request.URL, nil
 }
+
+// GetContent 获取存储内容
+func (c *client) GetContent(ctx context.Context, objectKey string) ([]byte, error) {
+	resp, err := c.cli.GetObject(ctx, &s3.GetObjectInput{
+		Bucket: aws.String(c.bucket),
+		Key:    aws.String(objectKey),
+	})
+	if err != nil {
+		return nil, err
+	}
+	content, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	return content, nil
+}
