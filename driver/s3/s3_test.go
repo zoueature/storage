@@ -8,12 +8,13 @@ import (
 )
 
 func TestClient_Upload(t *testing.T) {
-	cli := NewS3Storage(config.StorageConfig{
-		AccessKey:    os.Getenv("ACCESS_KEY"),
-		AccessSecret: os.Getenv("ACCESS_SECRET"),
-		Bucket:       os.Getenv("BUCKET"),
-		Region:       os.Getenv("REGION"),
-		Domain:       os.Getenv("DOMAIN"),
+	cli, _ := NewS3Storage(config.StorageConfig{
+		AccessKey:    "AKIAVWMHJF5WBBBZPUFV",
+		AccessSecret: "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",
+		Bucket:       "omi-shorts",
+		Region:       "ap-southeast-1",
+		Domain:       "https://omi-shorts.s3.ap-southeast-1.amazonaws.com",
+		CDN:          "https://dr3xwe1z6y1px.cloudfront.net",
 	})
 	ctx := context.Background()
 	f, _ := os.Open("1.png")
@@ -22,7 +23,7 @@ func TestClient_Upload(t *testing.T) {
 		t.Fatal(err)
 	}
 	println(s)
-	url, err := cli.SignAccessURL(ctx, "0f5d04c818080a18946a39a541eaa0ca")
+	url, err := cli.SignAccessURlTryCDN(ctx, "1351e3308f3b5325ceecfa2e0c538370.jpg")
 	if err != nil {
 		t.Fatal(err)
 	}

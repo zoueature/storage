@@ -14,4 +14,5 @@ type Storage interface {
 	UploadToPublic(ctx context.Context, reader io.Reader, keyOps ...KeyOperate) (string, error)
 	GetContent(ctx context.Context, objectKey string) ([]byte, error)
 	UploadByCustomKey(ctx context.Context, reader io.Reader, objectKey string) (string, error)
+	SignAccessURlTryCDN(ctx context.Context, objectKey string, ttl ...int) (string, error)
 }

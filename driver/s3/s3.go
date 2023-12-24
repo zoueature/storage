@@ -14,6 +14,7 @@ import (
 	"github.com/zoueature/storage"
 	"io"
 	"net/http"
+	"net/url"
 	"time"
 )
 
@@ -28,19 +29,29 @@ type client struct {
 	preSigner *s3.PresignClient
 	bucket    string
 	domain    string
+	cdn       *url.URL
 }
 
-func NewS3Storage(cfg config.StorageConfig) storage.Storage {
+func NewS3Storage(cfg config.StorageConfig) (storage.Storage, error) {
 	s3Client := s3.New(s3.Options{
 		Credentials: aws.NewCredentialsCache(credentials.NewStaticCredentialsProvider(cfg.AccessKey, cfg.AccessSecret, "")),
 		Region:      cfg.Region,
 	})
-	return &client{
+
+	c := &client{
 		cli:       s3Client,
 		preSigner: s3.NewPresignClient(s3Client),
 		bucket:    cfg.Bucket,
 		domain:    cfg.Domain,
 	}
+	if cfg.CDN != "" {
+		cdnInfo, err := url.Parse(cfg.CDN)
+		if err != nil {
+			return nil, nil
+		}
+		c.cdn = cdnInfo
+	}
+	return c, nil
 }
 
 func (c *client) Type() string {
@@ -107,7 +118,7 @@ func (c *client) UploadToPublic(ctx context.Context, reader io.Reader, keyOps ..
 	if err != nil {
 		return "", err
 	}
-	return fmt.Sprintf("%s/%s", c.domain, objectName), nil
+	return fmt.Sprintf("%s/%s", c.domain, name), nil
 }
 
 func (c *client) SignAccessURL(ctx context.Context, objectKey string, ttl ...int) (string, error) {
@@ -125,6 +136,23 @@ func (c *client) SignAccessURL(ctx context.Context, objectKey string, ttl ...int
 		return "", err
 	}
 	return request.URL, nil
+}
+
+func (c *client) SignAccessURlTryCDN(ctx context.Context, objectKey string, ttl ...int) (string, error) {
+	u, err := c.SignAccessURL(ctx, objectKey, ttl...)
+	if err != nil {
+		return "", err
+	}
+	if c.cdn == nil {
+		return u, nil
+	}
+	info, err := url.Parse(u)
+	if err != nil {
+		return "", err
+	}
+	info.Scheme = c.cdn.Scheme
+	info.Host = c.cdn.Host
+	return info.String(), nil
 }
 
 // GetContent 获取存储内容

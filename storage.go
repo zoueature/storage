@@ -6,7 +6,7 @@ import (
 
 import "github.com/zoueature/config"
 
-type storageDriver func(cfg config.StorageConfig) Storage
+type storageDriver func(cfg config.StorageConfig) (Storage, error)
 
 var driver storageDriver
 
@@ -19,6 +19,9 @@ func New(cfg config.StorageConfig) Storage {
 	if driver == nil {
 		panic(errors.New("storage driver not register"))
 	}
-	s := driver(cfg)
+	s, err := driver(cfg)
+	if err != nil {
+		panic(err)
+	}
 	return s
 }
